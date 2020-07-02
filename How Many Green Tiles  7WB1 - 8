@@ -1,0 +1,69 @@
+import random
+
+#count the number of times you play the game
+count=0
+#records your guesses 
+results=[]
+#records the actual number of green tiles in the bag
+numGrec=[]
+
+keepplay=(input('Do you still want to keep playing the game? Y/N:'))
+if keepplay in ['Y','y']:
+    cont=1
+else:
+    cont=0
+
+while cont == 1:
+    count=count+1
+    #this code creates a bag that contains 12 tiles
+    #some number of those tiles are green, and some are blue
+    bag=[]
+    blue='B'
+    green='G'
+    twelve=[1,2,3,4,5,6,7,8,9,10,11,12]
+    n=random.choice(twelve)
+    for i in range(n):
+        bag.append(green)
+    for i in range(12-n):
+        bag.append(blue)
+
+    est=[]  #this is a container for your estimate of the number of green tiles
+    
+    #For each bag there are 6 trials that draw a different number of tiles with replacement
+    numdraws=[6,12,18,24,30,120] 
+    
+    #For each trial:
+    for num in numdraws:
+    
+    #simulate draws from the bag
+        draws=[]   
+        for i in range(num):
+            draws.append(random.choice(bag))
+#       print('\n', draws) #prints the draws from the bag
+        numG=draws.count('G') #counts the number of green trials drawn
+        pctG=round((numG/num)*100,0) #calculates the percent of tiles that are green
+        
+        print('\n There are ',numG,'green tiles in the ', num, 'tiles you drew')
+        print('That is ',pctG,'% greens in the draws')
+        
+        #asks you to guess how many tiles in the bag are green, and stores the information in an estimate list
+        est.append(int(input("How many tiles in the bag of 12 do you think are green?")))
+
+    print('\n\nTHE GAME NUMBER FOR THIS RESULT IS:', count)
+    print('There were ',n,' green tiles in your bag')
+#    print('you guessed ',est, 'for ',numdraws, ' respectively')
+
+    results.append(est)
+    numGrec.append(n)
+    
+    keepplay=(input('\n\n Do you still want to keep playing the game? Y/N:'))
+    if keepplay in ['Y','y']:
+        cont=1
+    else:
+        cont=0
+
+#For each game (new bag), prints out the record of guesses and actual number of green tiles for each trial
+if cont == 0:
+  print('You have played ',count,'games altogether')
+  for i in range(len(results)):
+      print('guesses', results[i], 'actual:', numGrec[i], ', number of draws', numdraws)
